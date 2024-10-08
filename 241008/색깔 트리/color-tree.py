@@ -5,27 +5,28 @@ class node:
         self.color = color
         self.max_depth = max_depth
         self.parent = None
-        self.head = None
+        self.heads = []
         self.childs = []
 
     def search(self, m_id):
-        if self.head is None:
+        if len(self.heads) == 0:
             return None
         else:
-            queue = [self.head]
-            while len(queue) != 0:
-                ptr = queue.pop(0)
-                if ptr.m_id == m_id:
-                    break
-                else:
-                    for c in ptr.childs:
-                        queue.append(c)
+            for head in self.heads:
+                queue = [head]
+                while len(queue) != 0:
+                    ptr = queue.pop(0)
+                    if ptr.m_id == m_id:
+                        break
+                    else:
+                        for c in ptr.childs:
+                            queue.append(c)
         return ptr
 
     def insert_node(self, m_id, p_id, color, max_depth):
         if p_id == -1:
             newnode = node(m_id, p_id, color, max_depth)
-            self.head = newnode
+            self.heads.append(newnode)
             return 1
         else:
             target = self.search(p_id)
@@ -65,29 +66,30 @@ class node:
         print(target.color)
 
     def score_view(self):
-        queue = [self.head]
-        score = 0
-        while len(queue) != 0:
-            ptr = queue.pop(0)
+        for head in self.heads:
+            queue = [head]
+            score = 0
+            while len(queue) != 0:
+                ptr = queue.pop(0)
 
-            subtreeq = [ptr]
-            colors = []
-            while len(subtreeq) != 0:
-                ptr2 = subtreeq.pop(0)
-                if ptr2.color not in colors:
-                    colors.append(ptr2.color)
-                if len(ptr2.childs) == 0:
+                subtreeq = [ptr]
+                colors = []
+                while len(subtreeq) != 0:
+                    ptr2 = subtreeq.pop(0)
+                    if ptr2.color not in colors:
+                        colors.append(ptr2.color)
+                    if len(ptr2.childs) == 0:
+                        continue
+                    else:
+                        for c in ptr2.childs:
+                            subtreeq.append(c)
+                score += (len(colors) ** 2)
+
+                if len(ptr.childs) == 0:
                     continue
                 else:
-                    for c in ptr2.childs:
-                        subtreeq.append(c)
-            score += (len(colors) ** 2)
-
-            if len(ptr.childs) == 0:
-                continue
-            else:
-                for c in ptr.childs:
-                    queue.append(c)
+                    for c in ptr.childs:
+                        queue.append(c)
         print(score)
         
 
