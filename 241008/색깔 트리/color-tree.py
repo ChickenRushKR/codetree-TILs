@@ -48,15 +48,14 @@ def insert_node(m_id, p_id, color, max_depth):
 def color_change(m_id, color):
     # headidx, target = self.search(m_id)
     target = search(m_id)
-    queue = [target]
-    while len(queue) != 0:
-        ptr = queue.pop(0)
+    def recur_color(ptr):
         ptr.color = color
         if len(ptr.childs) == 0:
-            continue
+            return
         else:
             for c in ptr.childs:
-                queue.append(c)
+                recur_color(c)
+    recur_color(target)
     return 0
     
 def color_view(m_id):
@@ -68,6 +67,7 @@ def score_view():
     global nodes
     score = 0
     for node in nodes:
+        
         queue = [node]
         colors = []
         while len(queue) != 0:
