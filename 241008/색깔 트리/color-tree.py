@@ -1,3 +1,4 @@
+#https://www.codetree.ai/training-field/frequent-problems/problems/color-tree/submissions?page=1&pageSize=5
 nodes = []
 heads = []
 class node:
@@ -64,31 +65,21 @@ def color_view(m_id):
     print(target.color)
 
 def score_view():
-    global heads
+    global nodes
     score = 0
-    for head in heads:
-        queue = [head]
+    for node in nodes:
+        queue = [node]
+        colors = []
         while len(queue) != 0:
-            ptr = queue.pop(0)
-
-            subtreeq = [ptr]
-            colors = []
-            while len(subtreeq) != 0:
-                ptr2 = subtreeq.pop(0)
-                if ptr2.color not in colors:
-                    colors.append(ptr2.color)
-                if len(ptr2.childs) == 0:
-                    continue
-                else:
-                    for c in ptr2.childs:
-                        subtreeq.append(c)
-            score += (len(colors) ** 2)
-
-            if len(ptr.childs) == 0:
+            ptr2 = queue.pop(0)
+            if ptr2.color not in colors:
+                colors.append(ptr2.color)
+            if len(ptr2.childs) == 0:
                 continue
             else:
-                for c in ptr.childs:
+                for c in ptr2.childs:
                     queue.append(c)
+        score += (len(colors) ** 2)
     print(score)
         
 
