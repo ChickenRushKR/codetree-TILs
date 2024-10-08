@@ -66,20 +66,18 @@ def color_view(m_id):
 def score_view():
     global nodes
     score = 0
+    def recur_color2(ptr, colors):
+        colors.append(ptr.color)
+        if len(ptr.childs) == 0:
+            return colors
+        else:
+            for c in ptr.childs:
+                recur_color2(c, colors)
+            return colors
     for node in nodes:
-        
-        queue = [node]
-        colors = []
-        while len(queue) != 0:
-            ptr2 = queue.pop(0)
-            if ptr2.color not in colors:
-                colors.append(ptr2.color)
-            if len(ptr2.childs) == 0:
-                continue
-            else:
-                for c in ptr2.childs:
-                    queue.append(c)
-        score += (len(colors) ** 2)
+        arr = []
+        colors = recur_color2(node, arr)
+        score += (len(list(set(colors))) ** 2)
     print(score)
         
 
