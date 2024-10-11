@@ -12,6 +12,7 @@ def main():
     di = [-1, 0, 1, 0, 0]
     dj = [0, 1, 0, -1, 0]
 
+    max_score = 0
 
     def check_pos(ci, cj):
         di = [-1, 0, 1, 0, 0]
@@ -61,6 +62,27 @@ def main():
             if board[ci+1][cj+2] == 0 and board[ci+2][cj+1] == 0:
                 return True
         return False
+
+    def get_max(ci, cj, visited):
+        nonlocal max_score
+        if ci not in range(R+3) or cj not in range(C):
+            return
+        visited[ci][cj] = 1
+        max_score = max(max_score, ci)
+        for k in range(4):
+            newi = ci + di[k]
+            newj = cj + dj[k]
+            if newi not in range(len(board)) or newj not in range(len(board[0])):
+                continue
+            if visited[newi][newj] == 0 and board[newi][newj] != 0:
+                if board[ci][cj] >= 1000 :
+                    visited[newi][newj] = 0
+                    get_max(newi, newj, visited)
+                elif board[ci][cj] == board[newi][newj] or board[ci][cj]*1000 == board[newi][newj]:
+                    visited[newi][newj] = 0
+                    get_max(newi, newj, visited)
+        return
+
 
     def get_max_i(ci, cj):
         maxi = 0
@@ -114,30 +136,17 @@ def main():
                     direction = 0
                 ci, cj, direction = mov_pos(ci, cj, ci+1, cj+1, direction, n_of_g)
             else:
-                flag = False
-                for i in range(3):
-                    if sum(board[i]) != 0:
-                        flag = True
-                if flag:
+                if ci < 4:
                     board = [[0] * C for r in range(R+3)]
                     n_of_g = 0
                     break
                 outi, outj = ci + di[direction], cj + dj[direction]
-                # conn_flag = False
-                # for i in range(4):
-                #     newi, newj = outi+di[i], outj+dj[i]
-                #     if newi not in range(R+3) or newj not in range(C):
-                #         continue
-                #     elif board[newi][newj] == 1:
-                #         conn_flag = True
-                
-                # board[outi][outj] = 1
-                # if conn_flag:
-                score += (get_max_i(outi, outj) + 1 - 3)
+                visited = [[0] * C for r in range(R+3)]
+                get_max(ci, cj, visited)
+                score += (max_score + 1 - 3)
+                max_score = 0
+                # score += (get_max_i(outi, outj) + 1 - 3)
                 break
-                # else:
-                    # score += (ci + 1 + 1 - 3)
-                # break
     
     print(score)
             
