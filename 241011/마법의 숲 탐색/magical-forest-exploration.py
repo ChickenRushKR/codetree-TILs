@@ -1,9 +1,3 @@
-# 0: empty
-# 1: gollem
-# 2: wjdfud
-# 3: out
-from collections import deque
-
 def main():
     R, C, K = map(int, input().split(' '))
     gollems = [list(map(int, input().split(' '))) for k in range(K)]
@@ -83,30 +77,6 @@ def main():
                     get_max(newi, newj, visited)
         return
 
-
-    def get_max_i(ci, cj):
-        maxi = 0
-        di, dj = [-1, 1, 0, 0], [0, 0, -1, 1]
-        visited = [[0] * len(board[0]) for _ in range(len(board))]
-        queue = deque([[ci, cj]])
-        while queue:
-            ij = queue.popleft()
-            visited[ij[0]][ij[1]] = 1
-            maxi = max(maxi, ij[0])
-            for k in range(4):
-                newi = ij[0] + di[k]
-                newj = ij[1] + dj[k]
-                if newi not in range(len(board)) or newj not in range(len(board[0])):
-                    continue
-                if visited[newi][newj] == 0 and board[newi][newj] != 0:
-                    if board[ij[0]][ij[1]] >= 1000 :
-                        visited[newi][newj] = 0
-                        queue.append([newi, newj])
-                    elif board[ij[0]][ij[1]] == board[newi][newj] or board[ij[0]][ij[1]]*1000 == board[newi][newj]:
-                        visited[newi][newj] = 0
-                        queue.append([newi, newj])
-        return maxi
-
     score = 0
     n_of_g = 0
     for idx, gollem in enumerate(gollems):
@@ -145,7 +115,6 @@ def main():
                 get_max(ci, cj, visited)
                 score += (max_score + 1 - 3)
                 max_score = 0
-                # score += (get_max_i(outi, outj) + 1 - 3)
                 break
     
     print(score)
