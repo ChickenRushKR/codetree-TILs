@@ -24,7 +24,7 @@ def main():
                 break
         return movable
 
-    def mov_pos(ci, cj, new_ci, new_cj, direction):
+    def mov_pos(ci, cj, new_ci, new_cj, direction, n_of_g):
         di = [-1, 0, 1, 0, 0]
         dj = [0, 1, 0, -1, 0]
         for d in range(5):
@@ -33,10 +33,8 @@ def main():
 
         for d in range(5):
             newi, newj = new_ci+di[d], new_cj+dj[d]
-            board[newi][newj] = 1
-        board[new_ci][new_cj] = 2
-        board[new_ci + di[direction]][new_cj + dj[direction]] = 3
-        
+            board[newi][newj] = n_of_g
+        board[new_ci + di[direction]][new_cj + dj[direction]] = n_of_g * 1000
         return new_ci, new_cj, direction
 
 
@@ -79,37 +77,42 @@ def main():
                 if newi not in range(len(board)) or newj not in range(len(board[0])):
                     continue
                 if visited[newi][newj] == 0 and board[newi][newj] != 0:
-                    visited[newi][newj] = 0
-                    queue.append([newi, newj])
+                    if board[ij[0]][ij[1]] >= 1000 :
+                        visited[newi][newj] = 0
+                        queue.append([newi, newj])
+                    elif board[ij[0]][ij[1]] == board[newi][newj] or board[ij[0]][ij[1]]*1000 == board[newi][newj]:
+                        visited[newi][newj] = 0
+                        queue.append([newi, newj])
         return maxi
 
     score = 0
+    n_of_g = 0
     for idx, gollem in enumerate(gollems):
         # first_check
         ci, cj = 1, gollem[0]-1
         direction = gollem[1]
+        n_of_g += 1
         if check_pos(ci, cj) == False:
             board = [[0] * C for r in range(R+3)]
             continue
         else:
             for k in range(5):
-                board[ci+di[k]][cj+dj[k]] = 1
-            board[ci][cj] = 2
-            board[ci+di[direction]][cj+dj[direction]] = 3
+                board[ci+di[k]][cj+dj[k]] = n_of_g
+            board[ci+di[direction]][cj+dj[direction]] = n_of_g * 1000
         while True:
             if is_down(ci, cj):
-                ci, cj, direction = mov_pos(ci, cj, ci+1, cj, direction)
+                ci, cj, direction = mov_pos(ci, cj, ci+1, cj, direction, n_of_g)
                 continue
             elif is_south(ci, cj):
                 direction -= 1
                 if direction == -1:
                     direction = 3
-                ci, cj, direction = mov_pos(ci, cj, ci+1, cj-1, direction)
+                ci, cj, direction = mov_pos(ci, cj, ci+1, cj-1, direction, n_of_g)
             elif is_east(ci, cj):
                 direction += 1
                 if direction == 4:
                     direction = 0
-                ci, cj, direction = mov_pos(ci, cj, ci+1, cj+1, direction)
+                ci, cj, direction = mov_pos(ci, cj, ci+1, cj+1, direction, n_of_g)
             else:
                 flag = False
                 for i in range(3):
@@ -117,23 +120,24 @@ def main():
                         flag = True
                 if flag:
                     board = [[0] * C for r in range(R+3)]
+                    n_of_g = 0
                     break
                 outi, outj = ci + di[direction], cj + dj[direction]
-                conn_flag = False
-                for i in range(4):
-                    newi, newj = outi+di[i], outj+dj[i]
-                    if newi not in range(R+3) or newj not in range(C):
-                        continue
-                    elif board[newi][newj] == 1:
-                        conn_flag = True
+                # conn_flag = False
+                # for i in range(4):
+                #     newi, newj = outi+di[i], outj+dj[i]
+                #     if newi not in range(R+3) or newj not in range(C):
+                #         continue
+                #     elif board[newi][newj] == 1:
+                #         conn_flag = True
                 
-                board[ci][cj] = 1
-                board[outi][outj] = 1
-                if conn_flag:
-                    score += (get_max_i(outi, outj) + 1 - 3)
-                else:
-                    score += (ci + 1 + 1 - 3)
+                # board[outi][outj] = 1
+                # if conn_flag:
+                score += (get_max_i(outi, outj) + 1 - 3)
                 break
+                # else:
+                    # score += (ci + 1 + 1 - 3)
+                # break
     
     print(score)
             
