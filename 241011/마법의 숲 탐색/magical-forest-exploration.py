@@ -104,7 +104,7 @@ def main():
                 direction -= 1
                 if direction == -1:
                     direction = 3
-                ci, cj, direction = mov_pos(ci, cj, ci-1, cj-1, direction)
+                ci, cj, direction = mov_pos(ci, cj, ci+1, cj-1, direction)
             elif is_east(ci, cj):
                 direction += 1
                 if direction == 4:
