@@ -27,6 +27,8 @@ def main():
     for cmd in cmds:
         if cmd[0] == '100':
             t, x, name = int(cmd[1]), int(cmd[2]), cmd[3]
+            if timestack[-1] == 0:
+                timestack.append(t-1)
             sushi_names.append(name)
             table.append([t, x, name])
             if len(timestack) == 0:
