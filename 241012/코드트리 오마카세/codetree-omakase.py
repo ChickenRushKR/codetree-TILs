@@ -40,7 +40,8 @@ def main():
             t = int(cmd[1])
             if timestack[-1] == 0:
                 timestack.append(t-1)
-            process(t)
+            if len(table) > 0 and len(people.keys()) > 0:
+                process(t)
             print(len(people.keys()), len(table))
             timestack.append(t)
 
