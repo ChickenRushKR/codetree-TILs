@@ -36,6 +36,8 @@ def main():
             people[name] = [t, x, n]
         else:
             t = int(cmd[1])
+            if len(timestack) == 0:
+                timestack.append(t-1)
             process(t)
             print(len(people.keys()), len(table))
             timestack.append(t)
