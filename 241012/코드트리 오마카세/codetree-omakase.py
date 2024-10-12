@@ -9,7 +9,9 @@ def main():
 
     def process(t):
         while timestack[-1] < t:
+            flag = False
             for name in list(people.keys()):
+                flag = True
                 if people[name][0] <= t:
                     eat = 0
                     for idx in range(len(table)):
@@ -22,6 +24,8 @@ def main():
                                 if people[name][2] == 0:
                                     people.pop(name)
                                     break
+            if flag:
+                break
             t -= 1
 
     for cmd in cmds:
@@ -40,7 +44,7 @@ def main():
             t = int(cmd[1])
             if timestack[-1] == 0:
                 timestack.append(t-1)
-            if len(table) > 0 and len(people.keys()) > 0:
+            if len(table) > 0:
                 process(t)
             print(len(people.keys()), len(table))
             timestack.append(t)
