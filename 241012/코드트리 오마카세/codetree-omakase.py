@@ -4,7 +4,6 @@ def main():
     cmds = [input().split(' ') for q in range(Q)]
     table = deque()
     people = {}
-    rem_people = []
     sushi_names = []
     timestack = [0]
 
@@ -30,6 +29,8 @@ def main():
             t, x, name = int(cmd[1]), int(cmd[2]), cmd[3]
             sushi_names.append(name)
             table.append([t, x, name])
+            if len(timestack) == 0:
+                timestack.append(t-1)
         elif cmd[0] == '200':
             t, x, name, n = int(cmd[1]), int(cmd[2]), cmd[3], int(cmd[4])
             people[name] = [t, x, n]
