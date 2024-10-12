@@ -10,7 +10,7 @@ def main():
 
     def process(t):
         while timestack[-1] < t:
-            for name in rem_people:
+            for name in list(people.keys()):
                 if people[name][0] <= t:
                     eat = 0
                     for idx in range(len(table)):
@@ -21,7 +21,8 @@ def main():
                                 del table[idx-eat]
                                 eat += 1
                                 if people[name][2] == 0:
-                                    rem_people.remove(name)
+                                    people.pop(name)
+                                    break
             t -= 1
 
     for cmd in cmds:
@@ -32,13 +33,10 @@ def main():
         elif cmd[0] == '200':
             t, x, name, n = int(cmd[1]), int(cmd[2]), cmd[3], int(cmd[4])
             people[name] = [t, x, n]
-            rem_people.append(name)
-            # process(t)
-            # timestack.append(t)
         else:
             t = int(cmd[1])
             process(t)
-            print(len(rem_people), len(table))
+            print(len(people.keys()), len(table))
             timestack.append(t)
 
     
