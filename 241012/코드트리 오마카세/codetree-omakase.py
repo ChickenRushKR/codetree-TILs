@@ -24,7 +24,7 @@ def main():
                                 if people[name][2] == 0:
                                     people.pop(name)
                                     break
-            if flag:
+            if flag == False:
                 break
             t -= 1
 
